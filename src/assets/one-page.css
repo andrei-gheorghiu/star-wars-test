@@ -16,7 +16,7 @@ h6 {
     font-weight: 700;
 }
 
-    .overlay {
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -25,6 +25,12 @@ h6 {
     width: 100%;
     background: #002E66;
     opacity: .65;
+}
+.background-image {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background: url('./space_ship.jpg') no-repeat 50% 50% /cover;
 }
 
 .masthead {
@@ -70,9 +76,6 @@ tfoot th {
 }
 .full-page > div:first-child {
     background-color: rgba(0,0,0,.21);
-}
-.h-80 {
-    min-height: 80vh
 }
 code {
     color: #fd0

@@ -1,9 +1,10 @@
 <template>
     <div>
+        <div class="background-image"></div>
         <div class="overlay"></div>
         <b-row no-gutters class="full-page">
             <b-col sm="8">
-                <b-row no-gutters class="h-80">
+                <b-row no-gutters>
                     <b-col cols="10" offset="1" class="my-5 table-transparent text-white">
                         <b-table :items="hideUnknown ? filteredShips() : ships" :fields="fields" :bordered="false"
                                  small :outlined="false" class="table-borderless" :hover="true">
@@ -33,7 +34,7 @@
                 </b-row>
             </b-col>
             <b-col sm="4" class="fixed-panel">
-                <b-row no-gutters class="h-80">
+                <b-row no-gutters>
                     <b-col cols="10" offset="1" class="mt-5">
                         <b-col class="text-white">
                             <b-row no-gutters>
@@ -61,7 +62,7 @@
                             </b-row>
                         </b-col>
                     </b-col>
-                    <b-col cols="10" offset="1">
+                    <b-col cols="10" offset="1" class="mt-5">
                         <unknown-ships :ships="unknownShips(ships)"></unknown-ships>
                     </b-col>
                 </b-row>

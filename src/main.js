@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import VueMoment from 'vue-moment'
-import BootstrapVue from 'bootstrap-vue'
 import bFormCheckbox from 'bootstrap-vue/es/components/form-checkbox/form-checkbox';
 import Row from 'bootstrap-vue/es/components/layout/row';
 import Col from 'bootstrap-vue/es/components/layout/col';
@@ -12,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/one-page.css';
 
-Vue.use(VueMoment, BootstrapVue);
+Vue.use(VueMoment);
 
 Vue.component('b-form-checkbox', bFormCheckbox);
 Vue.component('b-row', Row);
