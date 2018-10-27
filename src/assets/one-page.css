@@ -1,0 +1,116 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+}
+
+video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 0;
+}
+
+@media (pointer: coarse) and (hover: none) {
+    body {
+        background: #002E66;
+    }
+    body video {
+        display: none;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background: #002E66;
+    opacity: .65;
+}
+
+.masthead {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 3rem;
+    z-index: 2;
+}
+
+.input {
+    font-weight: 300;
+}
+
+td, th {
+    text-align: center;
+}
+
+th:first-child, td:first-child {
+    text-align: left;
+}
+
+tfoot th {
+    font-weight: 400;
+}
+.full-page {
+    min-height: 100vh;
+    align-items: stretch;
+    z-index: 1;
+    position: relative;
+}
+.full-page > div:last-child {
+    background-color: rgba(0,0,0,.65);
+}
+.full-page > div:first-child {
+    background-color: rgba(0,0,0,.21);
+}
+.h-80 {
+    min-height: 80vh
+}
+code {
+    color: #fd0
+}
+.form-check-input {
+    margin-top: .75rem;
+}
+.form-check {
+    line-height: 38px;
+}
+.fixed-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.loader {
+    border: 5px solid rgba(255,255,255,.21);
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
