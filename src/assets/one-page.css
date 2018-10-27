@@ -52,6 +52,9 @@ td:nth-child(1):after {
 th:nth-child(2), td:nth-child(2) {
     text-align: left;
 }
+td:last-child {
+    padding: 0;
+}
 
 tfoot th {
     font-weight: 400;
@@ -102,4 +105,34 @@ code {
 
 .table-borderless th, .table-borderless td {
     border-top: 1px solid rgba(255,255,255,.12);
+}
+[data-padding-right] .fixed-panel {
+    flex-basis: calc((100% - 15px)/3);
+    max-width: calc((100% - 15px)/3);
+    right: 15px;
+}
+.modal-backdrop {
+    background-color: #245580;
+    opacity: .75
+}
+.modal-dialog [role="document"] {
+    background-color: rgba(0,0,0,.85);
+    color: #BADA55;
+}
+.close {
+    color: white;
+    text-shadow: 0 2px 0 black;
+    outline: none !important;
+}
+.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
+    color: #BADA55;
+}
+.btn-link {
+    color: white;
+    opacity: .65;
+    transition: opacity .2s linear;
+}
+.btn-link:hover {
+    color: white;
+    opacity: 1;
 }

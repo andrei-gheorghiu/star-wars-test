@@ -6,7 +6,7 @@
                 <b-row no-gutters class="h-80">
                     <b-col cols="10" offset="1" class="my-5 table-transparent text-white">
                         <b-table :items="hideUnknown ? filteredShips() : ships" :fields="fields" :bordered="false"
-                                 small="small" :outlined="false" class="table-borderless" :hover="true">
+                                 small :outlined="false" class="table-borderless" :hover="true">
                             <template slot="index" slot-scope="data">
                                 {{data.index + 1}}
                             </template>
@@ -18,6 +18,12 @@
                             </template>
                             <template slot="stops" slot-scope="data">
                                 {{parseStops(data.item).stops}}
+                            </template>
+                            <template slot="details" slot-scope="data">
+                                <b-btn @click="selected=data.item; modalShow = !modalShow;" variant="link" size="sm">
+                                    <i class="fa fa-eye-slash"></i>
+                                </b-btn>
+
                             </template>
                         </b-table>
                         <div class="d-flex justify-content-center">
@@ -61,6 +67,13 @@
                 </b-row>
             </b-col>
         </b-row>
+        <b-modal v-model="modalShow" :title="selected.name + ' [' + selected.model + ']'"
+                 centered hide-footer size="lg">
+            <b-row v-for="(value, propertyName) in selected" :key="propertyName">
+                <b-col cols="3">{{humanizeProperty(propertyName)}}</b-col>
+                <b-col cols="9">{{value}}</b-col>
+            </b-row>
+        </b-modal>
     </div>
 </template>
 <script>
@@ -80,6 +93,8 @@
 				distance: 0,
 				hideUnknown: false,
 				loading: false,
+                modalShow: false,
+                selected: {},
 				fields: [
 					'index',
 					{
@@ -91,17 +106,19 @@
 						sortable: true
 					}, {
 						key: 'consumables',
-						sortable: true,
-						formatter: val => {
-							return val + '<code>(' + this.toHours(val) + ')</code>'
-						}
+						sortable: true
 					}, {
 						key: 'stops',
 						sortable: true
-					}]
+					},
+                    'details'
+                ]
 			}
 		},
 		methods: {
+			humanizeProperty(string) {
+				return string.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1)}).replace(/_/g, ' ')
+            },
 			parseDistance(e) {
 				this.distance = e.target.value
 			},
