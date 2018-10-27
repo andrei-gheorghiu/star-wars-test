@@ -1,49 +1,40 @@
 <template>
     <div>
         <div class="overlay"></div>
-        <div class="row no-gutters full-page">
-            <div class="col-sm-8">
-                <div class="row no-gutters h-80">
-                    <div class="col-10 offset-1 my-5 table-transparent text-white">
-                        <table class="table table-borderless table-hover table-sm">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>MGLT/h</th>
-                                <th>Consumables</th>
-                                <th>Stops</th>
-                            </tr>
-                            </thead>
-                            <tbody v-if="ships.length">
-                            <tr v-if="parseStops(ship) !== 'unknown' || showHidden"
-                                v-for="ship in ships" :key="ship.url">
-                                <td>{{ship.name}} ({{ship.model}})</td>
-                                <td>{{ship.MGLT}}<span v-if="ship.MGLT !=='unknown'">MGLT/h</span></td>
-                                <td>{{ship.consumables}}
-                                    (<code>{{toHours(ship.consumables)}} hrs</code>)
-                                </td>
-                                <td>{{parseStops(ship)}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+        <b-row no-gutters class="full-page">
+            <b-col sm="8">
+                <b-row no-gutters class="h-80">
+                    <b-col cols="10" offset="1" class="my-5 table-transparent text-white">
+                        <b-table :items="hideUnknown ? filteredShips() : ships" :fields="fields" :bordered="false"
+                                 small="small" :outlined="false" class="table-borderless" :hover="true">
+                            <template slot="index" slot-scope="data">
+                                {{data.index + 1}}
+                            </template>
+                            <template slot="name" slot-scope="data">
+                                {{data.item.name}} ({{data.item.model}})
+                            </template>
+                            <template slot="consumables" slot-scope="data">
+                                {{data.item.consumables}} <code>({{toHours(data.item.consumables)}} hrs)</code>
+                            </template>
+                            <template slot="stops" slot-scope="data">
+                                {{parseStops(data.item).stops}}
+                            </template>
+                        </b-table>
                         <div class="d-flex justify-content-center">
                             <div class="loader" v-show="loading"></div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 fixed-panel">
-                <div class="row h-80 no-gutters">
-                    <div class="col-10 offset-1 mt-5">
-                        <div class="col text-white">
-                            <div class="row no-gutters">
+                    </b-col>
+                </b-row>
+            </b-col>
+            <b-col sm="4" class="fixed-panel">
+                <b-row no-gutters class="h-80">
+                    <b-col cols="10" offset="1" class="mt-5">
+                        <b-col class="text-white">
+                            <b-row no-gutters>
                                 <div class="form-group col-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="showHidden" v-model="showHidden">
-                                        <label class="form-check-label" for="showHidden">
-                                            Show Hidden
-                                        </label>
-                                    </div>
+                                    <b-form-checkbox v-model="hideUnknown">
+                                        Hide unknown
+                                    </b-form-checkbox>
                                 </div>
                                 <div class="form-group col-6">
                                     <div class="input-group">
@@ -61,36 +52,53 @@
                                            min="10000" max="100000000"
                                            v-on:input="parseDistance" class="form-control-range">
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-10 offset-1">
+                            </b-row>
+                        </b-col>
+                    </b-col>
+                    <b-col cols="10" offset="1">
                         <unknown-ships :ships="unknownShips(ships)"></unknown-ships>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </b-col>
+                </b-row>
+            </b-col>
+        </b-row>
     </div>
 </template>
 <script>
 	import Vue from 'vue'
 	import $http from 'vue-resource'
-	import VueMoment from 'vue-moment'
-	import FormCheckbox from 'bootstrap-vue'
 	import UnknownShips from "./UnknowknShips.vue"
 
-	Vue.use($http, VueMoment, FormCheckbox);
+	Vue.use($http);
 
 	export default {
 		name: 'Starships',
-		components: {UnknownShips, FormCheckbox},
+		components: {UnknownShips},
 		data() {
 			return {
 				title: 'Starships',
 				ships: [],
 				distance: 0,
-				showHidden: false,
-              loading: false
+				hideUnknown: false,
+				loading: false,
+				fields: [
+					'index',
+					{
+						key: 'name',
+						sortable: true
+					}, {
+						key: 'MGLT',
+						label: 'MGLT/hr',
+						sortable: true
+					}, {
+						key: 'consumables',
+						sortable: true,
+						formatter: val => {
+							return val + '<code>(' + this.toHours(val) + ')</code>'
+						}
+					}, {
+						key: 'stops',
+						sortable: true
+					}]
 			}
 		},
 		methods: {
@@ -98,19 +106,21 @@
 				this.distance = e.target.value
 			},
 			unknownShips(ships) {
-				return ships.filter(ship => this.parseStops(ship) === 'unknown')
+				return ships.filter(ship => ship.stops === 'unknown')
 			},
 			parseStops(ship) {
 				if (ship.consumables === 'unknown' || ship.MGLT === 'unknown') {
-					return 'unknown'
+					ship.stops = 'unknown';
+				} else {
+					const autonomy = this.toHours(ship.consumables);
+
+					const speed = ship.MGLT;
+
+					const maxDistance = speed * autonomy;
+
+					ship.stops = Math.floor(this.distance / maxDistance);
 				}
-				const autonomy = this.toHours(ship.consumables)
-
-				const speed = ship.MGLT
-
-				const maxDistance = speed * autonomy
-
-				return Math.floor(this.distance / maxDistance)
+				return ship;
 			},
 			toHours(value) {
 				return this.$moment.duration(Number(value.replace(/[^0-9]/g, '')), value.replace(/[0-9,\s]/g, ''))
@@ -120,14 +130,17 @@
 				this.loading = true;
 				this.$http.get(url).then((r) => {
 					r.data.results.forEach((item) => {
-						this.ships.push(item)
+						this.ships.push(this.parseStops(item))
 					});
 					if (r.body.next) {
 						this.fetchData(r.body.next)
 					} else {
 						this.loading = false;
-                    }
+					}
 				})
+			},
+			filteredShips() {
+				return this.ships.filter(ship => ship.consumables !== 'unknown' && ship.MGLT !== 'unknown')
 			}
 		},
 		created() {

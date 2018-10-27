@@ -40,9 +40,16 @@ h6 {
 
 td, th {
     text-align: center;
+    outline: none;
 }
 
-th:first-child, td:first-child {
+th:nth-child(1), td:nth-child(1) {
+    text-align: right;
+}
+td:nth-child(1):after {
+    content: ' '
+}
+th:nth-child(2), td:nth-child(2) {
     text-align: left;
 }
 
@@ -91,4 +98,8 @@ code {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.table-borderless th, .table-borderless td {
+    border-top: 1px solid rgba(255,255,255,.12);
 }
