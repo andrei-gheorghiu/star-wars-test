@@ -13,6 +13,9 @@ npm run serve
 ### Compiles and minifies for production
 ```
 npm run build
+// to view the production build locally:
+npm i -g http-server
+http-server dist
 ```
 
 ### Run your tests
