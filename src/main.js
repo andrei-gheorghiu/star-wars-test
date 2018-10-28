@@ -8,6 +8,7 @@ import Col from 'bootstrap-vue/es/components/layout/col'
 import Table from 'bootstrap-vue/es/components/table/table'
 import Modal from 'bootstrap-vue/es/components/modal/modal'
 import Button from 'bootstrap-vue/es/components/button/button'
+import vBTooltip from 'bootstrap-vue/es/directives/tooltip/tooltip';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/one-page.scss'
@@ -21,6 +22,7 @@ Vue.component('b-table', Table);
 Vue.component('b-modal', Modal);
 Vue.component('b-btn', Button);
 Vue.component('b-form-checkbox', bFormCheckbox);
+Vue.directive('b-tooltip', vBTooltip);
 
 Vue.config.productionTip = false;
 
