@@ -5,9 +5,13 @@
         <b-row no-gutters class="full-page">
             <b-col sm="8">
                 <b-row no-gutters>
-                    <b-col cols="10" offset="1" class="my-5 table-transparent text-white">
-                        <b-table :items="hideUnknown ? filteredShips() : ships" :fields="fields" :bordered="false"
-                                 small :outlined="false" class="table-borderless" :hover="true">
+                    <b-col xl="10" offset-xl="1" class="my-5 table-transparent text-white">
+                        <b-table :items="hideUnknown ? filteredShips() : ships"
+                                 :fields="fields"
+                                 :bordered="false"
+                                 :outlined="false"
+                                 :hover="true"
+                                 class="table-borderless" small stacked="md">
                             <template slot="index" slot-scope="data">
                                 {{data.index + 1}}
                             </template>
@@ -15,7 +19,7 @@
                                 {{data.item.name}} ({{data.item.model}})
                             </template>
                             <template slot="consumables" slot-scope="data">
-                                {{data.item.consumables}} <code>({{toHours(data.item.consumables)}} hrs)</code>
+                                {{data.item.consumables}} <code v-show="data.item.consumables !== u"><br class="d-none d-md-inline">({{toHours(data.item.consumables)}} hrs)</code>
                             </template>
                             <template slot="stops" slot-scope="data">
                                 {{parseStops(data.item).stops}}
@@ -24,7 +28,6 @@
                                 <b-btn @click="selected=data.item; modalShow = !modalShow;" variant="link" size="sm">
                                     <i class="fa fa-eye-slash"></i>
                                 </b-btn>
-
                             </template>
                         </b-table>
                         <div class="d-flex justify-content-center">
@@ -35,15 +38,15 @@
             </b-col>
             <b-col sm="4" class="fixed-panel">
                 <b-row no-gutters>
-                    <b-col cols="10" offset="1" class="mt-5">
+                    <b-col xl="10" offset-xl="1" class="mt-5">
                         <b-col class="text-white">
                             <b-row no-gutters>
-                                <div class="form-group col-6">
+                                <b-col class="form-group" lg="6">
                                     <b-form-checkbox v-model="hideUnknown">
                                         Hide unknown
                                     </b-form-checkbox>
-                                </div>
-                                <div class="form-group col-6">
+                                </b-col>
+                                <b-col class="form-group" lg="6">
                                     <div class="input-group">
                                         <input class="form-control"
                                                v-model="distance" type="number"
@@ -53,16 +56,16 @@
                                             <span class="input-group-text">MGLT</span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group col-12">
+                                </b-col>
+                                <b-col class="form-group" cols="12">
                                     <input type="range" v-model="distance"
                                            min="10000" max="100000000"
                                            v-on:input="parseDistance" class="form-control-range">
-                                </div>
+                                </b-col>
                             </b-row>
                         </b-col>
                     </b-col>
-                    <b-col cols="10" offset="1" class="mt-5">
+                    <b-col xl="10" offset-xl="1" class="mt-5 mx-3 mx-xl-auto">
                         <unknown-ships :ships="unknownShips(ships)"></unknown-ships>
                     </b-col>
                 </b-row>
@@ -83,21 +86,26 @@
 	import UnknownShips from "./UnknowknShips.vue"
 
 	Vue.use($http);
+	const u = 'unknown';
 
 	export default {
 		name: 'Starships',
 		components: {UnknownShips},
 		data() {
 			return {
+				u,
 				title: 'Starships',
-				ships: [],
+                ships: [],
 				distance: 0,
 				hideUnknown: false,
 				loading: false,
-                modalShow: false,
-                selected: {},
+				modalShow: false,
+				selected: {},
 				fields: [
-					'index',
+					{
+						key: 'index',
+						class: 'd-none d-lg-table-cell'
+					},
 					{
 						key: 'name',
 						sortable: true
@@ -112,23 +120,25 @@
 						key: 'stops',
 						sortable: true
 					},
-                    'details'
-                ]
+					'details'
+				]
 			}
 		},
 		methods: {
 			humanizeProperty(string) {
-				return string.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1)}).replace(/_/g, ' ')
-            },
+				return string.replace(/\w\S*/g, function (txt) {
+					return txt.charAt(0).toUpperCase() + txt.substr(1)
+				}).replace(/_/g, ' ')
+			},
 			parseDistance(e) {
 				this.distance = e.target.value
 			},
 			unknownShips(ships) {
-				return ships.filter(ship => ship.stops === 'unknown')
+				return ships.filter(ship => ship.stops === u)
 			},
 			parseStops(ship) {
-				if (ship.consumables === 'unknown' || ship.MGLT === 'unknown') {
-					ship.stops = 'unknown';
+				if (ship.consumables === u || ship.MGLT === u) {
+					ship.stops = u;
 				} else {
 					const autonomy = this.toHours(ship.consumables);
 
@@ -158,7 +168,7 @@
 				})
 			},
 			filteredShips() {
-				return this.ships.filter(ship => ship.consumables !== 'unknown' && ship.MGLT !== 'unknown')
+				return this.ships.filter(ship => ship.consumables !== u && ship.MGLT !== u)
 			}
 		},
 		created() {

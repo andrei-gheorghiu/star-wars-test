@@ -9,16 +9,16 @@ import Modal from 'bootstrap-vue/es/components/modal/modal';
 import Button from 'bootstrap-vue/es/components/button/button';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './assets/one-page.css';
+import './assets/one-page.scss';
 
 Vue.use(VueMoment);
 
-Vue.component('b-form-checkbox', bFormCheckbox);
 Vue.component('b-row', Row);
 Vue.component('b-col', Col);
 Vue.component('b-table', Table);
 Vue.component('b-modal', Modal);
 Vue.component('b-btn', Button);
+Vue.component('b-form-checkbox', bFormCheckbox);
 
 Vue.config.productionTip = false;
 
