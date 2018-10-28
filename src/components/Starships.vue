@@ -140,7 +140,7 @@
 				if (ship.consumables === u || ship.MGLT === u) {
 					ship.stops = u;
 				} else {
-					ship.stops = Math.floor(this.distance / ship.MGLT * this.toHours(ship.consumables));
+					ship.stops = Math.floor(this.distance / (ship.MGLT * this.toHours(ship.consumables)));
 				}
 				return ship;
 			},
