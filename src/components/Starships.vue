@@ -71,7 +71,9 @@
                 </b-row>
             </b-col>
         </b-row>
-        <b-modal v-model="modalShow" :title="selected.name + ' [' + selected.model + ']'"
+        <b-modal v-model="modalShow"
+                 :title="selected.name + ' [' + selected.model + ']'"
+                 body-class="small"
                  centered hide-footer size="lg">
             <b-row v-for="(value, propertyName) in selected" :key="propertyName">
                 <b-col cols="3">{{humanizeProperty(propertyName)}}</b-col>

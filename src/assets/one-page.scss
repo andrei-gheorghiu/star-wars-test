@@ -4,15 +4,9 @@ html {
 
 body {
   height: 100%;
-  font-weight: 300;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
@@ -34,13 +28,6 @@ h6 {
   background: url('./space_ship.jpg') no-repeat 50% 50% /cover;
 }
 
-.masthead {
-  position: relative;
-  overflow: hidden;
-  padding-bottom: 3rem;
-  z-index: 2;
-}
-
 .input {
   font-weight: 300;
 }
@@ -48,18 +35,16 @@ h6 {
 td, th {
   text-align: center;
   outline: none;
-}
-
-th:nth-child(1), td:nth-child(1) {
-  text-align: right;
+  &:first-child {
+    text-align: right;
+  }
+  &:nth-child(2) {
+    text-align: left;
+  }
 }
 
 td:nth-child(1):after {
   content: ' '
-}
-
-th:nth-child(2), td:nth-child(2) {
-  text-align: left;
 }
 
 td:last-child {
@@ -75,26 +60,23 @@ tfoot th {
   align-items: stretch;
   z-index: 1;
   position: relative;
-}
-
-.full-page > div:last-child {
-  background-color: rgba(0, 0, 0, .65);
-}
-
-.full-page > div:first-child {
-  background-color: rgba(0, 0, 0, .21);
+  & > div:last-child {
+    background-color: rgba(0, 0, 0, .65);
+  }
+  & > div:first-child {
+    background-color: rgba(0, 0, 0, .21);
+  }
 }
 
 code {
   color: #fd0
 }
 
-.form-check-input {
-  margin-top: .75rem;
-}
-
 .form-check {
   line-height: 38px;
+  &-input {
+    margin-top: .75rem;
+  }
 }
 
 .fixed-panel {
@@ -105,6 +87,11 @@ code {
   top: 0;
   right: 0;
   bottom: 0;
+  [data-padding-right] & {
+    flex-basis: calc((100% - 15px) / 3);
+    max-width: calc((100% - 15px) / 3);
+    right: 15px;
+  }
 }
 
 .loader {
@@ -131,14 +118,10 @@ code {
   }
 }
 
-.table-borderless th, .table-borderless td {
-  border-top: 1px solid rgba(255, 255, 255, .12);
-}
-
-[data-padding-right] .fixed-panel {
-  flex-basis: calc((100% - 15px) / 3);
-  max-width: calc((100% - 15px) / 3);
-  right: 15px;
+.table-borderless {
+  th, td {
+    border-top: 1px solid rgba(255, 255, 255, .12);
+  }
 }
 
 .modal-backdrop {
@@ -159,17 +142,27 @@ code {
   outline: none !important;
 }
 
-.close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
-  color: #BADA55;
+.close:not(:disabled):not(.disabled) {
+  &:hover, &:focus {
+    color: #BADA55;
+  }
 }
 
 .btn-link {
   color: white;
   opacity: .65;
   transition: opacity .2s linear;
+  &:hover {
+    color: white;
+    opacity: 1;
+  }
 }
-
-.btn-link:hover {
-  color: white;
-  opacity: 1;
+.custom-control {
+  cursor: pointer;
+  * {
+    cursor: pointer;
+  }
+  .custom-control-input:focus ~ &-label::before {
+    box-shadow: none;
+  }
 }
