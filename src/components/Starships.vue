@@ -6,7 +6,7 @@
             <b-col sm="8">
                 <b-row no-gutters>
                     <b-col xl="10" offset-xl="1" class="my-5 table-transparent text-white">
-                        <b-table :items="hideUnknown ? filteredShips() : ships"
+                        <b-table :items="hideUnknown ? filterShips() : ships"
                                  :fields="fields"
                                  :bordered="false"
                                  :outlined="false"
@@ -19,7 +19,7 @@
                                 {{data.item.name}} ({{data.item.model}})
                             </template>
                             <template slot="consumables" slot-scope="data">
-                                {{data.item.consumables}} <code v-show="data.item.consumables !== u"><br class="d-none d-md-inline">({{toHours(data.item.consumables)}} hrs)</code>
+                                {{data.item.consumables}} <code v-show="data.item.consumables !== u"><br class="d-none d-md-inline d-xl-none">({{toHours(data.item.consumables)}} hrs)</code>
                             </template>
                             <template slot="stops" slot-scope="data">
                                 {{parseStops(data.item).stops}}
@@ -83,11 +83,8 @@
     </div>
 </template>
 <script>
-	import Vue from 'vue'
-	import $http from 'vue-resource'
 	import UnknownShips from "./UnknowknShips.vue"
 
-	Vue.use($http);
 	const u = 'unknown';
 
 	export default {
@@ -97,7 +94,7 @@
 			return {
 				u,
 				title: 'Starships',
-                ships: [],
+				ships: [],
 				distance: 0,
 				hideUnknown: false,
 				loading: false,
@@ -117,7 +114,8 @@
 						sortable: true
 					}, {
 						key: 'consumables',
-						sortable: true
+						sortable: true,
+                        width: 193
 					}, {
 						key: 'stops',
 						sortable: true
@@ -142,39 +140,34 @@
 				if (ship.consumables === u || ship.MGLT === u) {
 					ship.stops = u;
 				} else {
-					const autonomy = this.toHours(ship.consumables);
-
-					const speed = ship.MGLT;
-
-					const maxDistance = speed * autonomy;
-
-					ship.stops = Math.floor(this.distance / maxDistance);
+					ship.stops = Math.floor(this.distance / ship.MGLT * this.toHours(ship.consumables));
 				}
 				return ship;
 			},
 			toHours(value) {
-				return this.$moment.duration(Number(value.replace(/[^0-9]/g, '')), value.replace(/[0-9,\s]/g, ''))
-						.asHours()
+				return this.$moment.duration(
+						Number(value.replace(/[^0-9]/g, '')),
+						value.replace(/[0-9,\s]/g, '')
+				).asHours()
 			},
-			fetchData(url) {
+			fetchShips(url) {
 				this.loading = true;
 				this.$http.get(url).then((r) => {
 					r.data.results.forEach((item) => {
 						this.ships.push(this.parseStops(item))
 					});
-					if (r.body.next) {
-						this.fetchData(r.body.next)
-					} else {
+					if (r.data.next)
+						this.fetchShips(r.data.next);
+					else
 						this.loading = false;
-					}
 				})
 			},
-			filteredShips() {
+			filterShips() {
 				return this.ships.filter(ship => ship.consumables !== u && ship.MGLT !== u)
 			}
 		},
 		created() {
-			this.fetchData('https://swapi.co/api/starships')
+			this.fetchShips('https://swapi.co/api/starships')
 		}
 	}
 </script>

@@ -102,6 +102,11 @@ code {
   height: 60px;
   animation: spin 2s linear infinite;
 }
+@media (min-width: 1200px) {
+  td[aria-colindex="4"] {
+    min-width: 193px;
+  }
+}
 
 @media (max-width: 767px) {
   td[aria-colindex="2"] {
