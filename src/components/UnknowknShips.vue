@@ -5,6 +5,7 @@
             <button type="button" v-for="ship in ships" :key="ship.index"
                     v-b-tooltip="{title:createTooltip(ship)}"
                     class="btn btn-dark btn-sm" style="margin: 5px;"
+                    @click="openModal(ship)"
             >{{ship.model}}
             </button>
         </div>
@@ -15,7 +16,8 @@
 	export default {
 		name: 'UnknownShips',
 		props: {
-			ships: Array
+			ships: Array,
+            openModal: Function
 		},
 		data() {
 			return {

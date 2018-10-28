@@ -66,7 +66,7 @@
                         </b-col>
                     </b-col>
                     <b-col xl="10" offset-xl="1" class="mt-5 mx-3 mx-xl-auto">
-                        <unknown-ships :ships="unknownShips(ships)"></unknown-ships>
+                        <unknown-ships :ships="unknownShips(ships)" :openModal="openModal"></unknown-ships>
                     </b-col>
                 </b-row>
             </b-col>
@@ -164,7 +164,11 @@
 			},
 			filterShips() {
 				return this.ships.filter(ship => ship.consumables !== u && ship.MGLT !== u)
-			}
+			},
+            openModal(ship){
+                this.selected = ship;
+                this.modalShow = true;
+            }
 		},
 		created() {
 			this.fetchShips('https://swapi.co/api/starships')
